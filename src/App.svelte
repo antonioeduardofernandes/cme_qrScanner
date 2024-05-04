@@ -9,16 +9,16 @@
     const config = { fps: 10, qrbox: { width: 250, height: 250 } };
 
     const scannedSuccess = (decodedText, decodedResult) => {
-      content = store.find((e) => e.name == decodedText);
+      content = store.find((e) => e.id == decodedText);
       // html5QrCode.stop()
     };
 
     html5QrCode.start({ facingMode: "environment" }, config, scannedSuccess);
   });
 
-  const closeModal = ()=>{
-    content = null
-  }
+  const closeModal = () => {
+    content = null;
+  };
 
   console.log(store);
 </script>
@@ -28,11 +28,13 @@
 
 {#if content}
   <div id="modal">
-    <div class="close_button" on:click="{closeModal}">X</div>
+    <div class="close_button" on:click={closeModal}>X</div>
     <div class="content">
       <div class="header">
         <h3>{content.label}</h3>
-        <h3>Marcador: {content.marker}</h3>
+        {#if content.marker}
+          <h3>Marcador: {content.marker}</h3>
+        {/if}
       </div>
       <table>
         <tr>
@@ -40,10 +42,10 @@
           <th>Quantidade</th>
         </tr>
         {#each content.items as item}
-        <tr>
-          <td>{item.label}</td>
-          <td class="quantity">{item.quantity}</td>
-        </tr>
+          <tr>
+            <td>{item.label}</td>
+            <td class="quantity">{item.quantity}</td>
+          </tr>
         {/each}
       </table>
     </div>
@@ -93,7 +95,7 @@
     text-align: center;
   }
 
-  .close_button{
+  .close_button {
     display: flex;
     text-align: center;
     justify-content: center;
