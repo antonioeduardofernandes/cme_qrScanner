@@ -2,6 +2,7 @@
   import { Html5Qrcode } from "html5-qrcode";
   import { onMount } from "svelte";
   import { store } from "./store";
+
   let content;
 
   onMount(() => {
@@ -19,8 +20,6 @@
   const closeModal = () => {
     content = null;
   };
-
-  console.log(store);
 </script>
 
 <h1>Leitor de QR Code</h1>
@@ -28,26 +27,28 @@
 
 {#if content}
   <div id="modal">
-    <div class="close_button" on:click={closeModal}>X</div>
-    <div class="content">
+    <div class="content" >
+      <div class="close_button" on:click={closeModal}>X</div>
       <div class="header">
-        <h3>{content.label}</h3>
+        <h4>{content.label}</h4>
         {#if content.marker}
-          <h3>Marcador: {content.marker}</h3>
+          <h4>Marcador: {content.marker}</h4>
         {/if}
       </div>
-      <table>
-        <tr>
-          <th>Nome</th>
-          <th>Quantidade</th>
-        </tr>
-        {#each content.items as item}
-          <tr>
-            <td>{item.label}</td>
-            <td class="quantity">{item.quantity}</td>
-          </tr>
-        {/each}
-      </table>
+      <div class="list">
+        <div class="list_header">
+          <div>Nome</div>
+          <div>Quantidade</div>
+        </div>
+        <div class="items">
+          {#each content.items as item}
+            <div class="item">
+              <div>{item.label}</div>
+              <div class="quantity">{item.quantity}</div>
+            </div>
+          {/each}
+        </div>
+      </div>
     </div>
   </div>
 {/if}
@@ -59,43 +60,27 @@
     box-sizing: border-box;
     font-family: Arial, sans-serif;
     user-select: none;
-    overflow: hidden;
   }
 
   #modal {
+    height: 100vh;
+    width: 100vw;
     position: absolute;
     z-index: 9000;
-    background-color: black;
-    height: 100%;
-    width: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
     top: 0;
     left: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-
-  .content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-height: 90vh;
-    max-width: 90vh;
-    padding: 1rem;
-    background-color: white;
-    overflow: scroll;
-  }
-
-  table {
-    text-align: left;
-  }
-
-  .quantity {
     text-align: center;
   }
 
   .close_button {
+    position: absolute;
+    z-index: 9999;
+    top: 110px;
+    right: 6px;
     display: flex;
     text-align: center;
     justify-content: center;
@@ -103,11 +88,53 @@
     width: 30px;
     height: 30px;
     color: white;
-    background-color: red;
+    background-color: rgb(218, 50, 50);
     border-radius: 50%;
-    position: absolute;
-    z-index: 9999;
-    top: 30px;
-    right: 30px;
+  }
+
+  .content {
+    height: 600px;
+    width: 340px;
+    display: flex;
+    flex-flow: column;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .content .header {
+    text-transform: uppercase;
+  }
+
+  .list {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-flow: column;
+    text-transform: capitalize;
+  }
+
+  .list_header {
+    display: flex;
+    background-color: black;
+    color: white;
+    justify-content: space-between;
+    padding: 0.2rem;
+  }
+
+  .items {
+    overflow: scroll;
+  }
+
+  .item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.2rem;
+  }
+
+  .item:nth-child(even) {
+    background-color: rgba(173, 226, 222, 0.4);
   }
 </style>
