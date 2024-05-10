@@ -7,7 +7,7 @@
 
 </script>
 
-<h1>Leitor de QR Code</h1>
+<h1>QR Code</h1>
 <Scanner on:scanned={readID}/>
 <Table content={content}/>
 
